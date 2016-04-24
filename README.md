@@ -1,15 +1,12 @@
 # SwipeBackFragment
-submit first
+
 SwipeBackFragment,实现拖拽返回的fragment，一个类似于SwipeBackActivity的开源项目。
 
-支持四个方向拖拽
+支持四个方向拖拽，通过setSwipeModel(SwipeBackLayout.SWIPE_RIGHT)...
 
 
 用法：继承BaseSwipeFragment，实现三个方法
 
-attachSwipe()：是否支持拖拽
-getViewRootId()：返回fragment根布局
-init()：初始化代码写在这里
 
 public class FragmentSlide extends BaseSwipeFragment {
 
@@ -21,9 +18,17 @@ public class FragmentSlide extends BaseSwipeFragment {
 
     @Override
     protected void init() {}
-
-    public void addFragmentClick(View v){
-        Toast.makeText(getActivity(),"!!",Toast.LENGTH_SHORT).show();
-        ((MainActivity)getActivity()).addFragment(new FragmentSlide(),R.anim.slide_in_from_right,R.anim.slide_out_to_right);
-    }
 }
+
+
+attachSwipe()：是否支持拖拽
+
+getViewRootId()：返回fragment根布局
+
+init()：初始化代码写在这里
+
+Contact Author：
+
+E-mail:aa999999999@vip.qq.com
+QQ:542391099
+csdn: blog.csdn.net/u012874222
