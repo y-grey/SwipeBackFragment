@@ -78,7 +78,7 @@ public class SwipeBackLayout extends RelativeLayout {
 		mImgView.setBackgroundColor(getResources().getColor(android.R.color.white));
 		addView(mImgView);
         setClickable(true);
-		this.setBackgroundColor(Color.argb(0, 0, 0, 0));
+		setBackgroundColor(Color.argb(0, 0, 0, 0));
 	}
 	private void startScroll(int startX,int startY,int dx,int dy, int duration) {
 		mScroller.startScroll(startX, startY, dx, dy,duration);
@@ -110,42 +110,41 @@ public class SwipeBackLayout extends RelativeLayout {
 			mCurryY = (int) event.getY();
 			mDelX = mCurryX - mLastDownX;
 			mDelY = mCurryY - mLastDownY;
-			if (model == SWIPE_RIGHT && mDelX > 0) {
+			if (model == SWIPE_RIGHT ) {
 				if (Math.abs(mDelX) > mScreenWidth / 3) {
-					startScroll(this.getScrollX(),0, -mScreenWidth,0, 1000);
+					startScroll(getScrollX(),0, -mScreenWidth-getScrollX(),0, 1000);
 					isClose = true;
 					if(onSwipeFinish != null)
 					onSwipeFinish.swipeFinish();
 				} else {
-					startScroll(this.getScrollX(),0, -this.getScrollX(),0, 500);
+					startScroll(getScrollX(),0, -getScrollX(),0, 500);
 				}
 
-			}else if (model == SWIPE_BOTTOM && mDelY > 0) {
+			}else if (model == SWIPE_BOTTOM ) {
 				if (Math.abs(mDelY) > mScreenHeight / 8) {
-					startScroll(0,this.getScrollY(),0, -mScreenHeight, 1000);
+					Log.d("","----->"+getScrollY()+"   "+mScreenHeight);
+					startScroll(0,getScrollY(),0, -mScreenHeight-getScrollY(), 1000);
 					isClose = true;
-					if(onSwipeFinish != null)
-						onSwipeFinish.swipeFinish();
 				} else {
-					startScroll(0,this.getScrollY(),0, -this.getScrollY(), 500);
+					startScroll(0,getScrollY(),0, -getScrollY(), 500);
 				}
-			}else if (model == SWIPE_LEFT && mDelX < 0) {
+			}else if (model == SWIPE_LEFT ) {
 				if (Math.abs(mDelX) > mScreenWidth / 3) {
-					startScroll(this.getScrollX(),0, mScreenWidth,0, 1000);
+					startScroll(getScrollX(),0,mScreenWidth-getScrollX() ,0, 1000);
 					isClose = true;
 					if(onSwipeFinish != null)
 						onSwipeFinish.swipeFinish();
 				} else {
-					startScroll(this.getScrollX(),0, -this.getScrollX(),0, 500);
+					startScroll(getScrollX(),0, -getScrollX(),0, 500);
 				}
-			}else if (model == SWIPE_TOP && mDelY< 0) {
+			}else if (model == SWIPE_TOP ) {
 				if (Math.abs(mDelY) > mScreenHeight / 8) {
-					startScroll(0,this.getScrollY(),0, mScreenHeight, 1000);
+					startScroll(0,getScrollY(),0,mScreenHeight-getScrollY(), 1000);
 					isClose = true;
 					if(onSwipeFinish != null)
 						onSwipeFinish.swipeFinish();
 				} else {
-					startScroll(0,this.getScrollY(),0, -this.getScrollY(), 500);
+					startScroll(0,getScrollY(),0, -getScrollY(), 500);
 				}
 			}
 
@@ -194,7 +193,7 @@ public class SwipeBackLayout extends RelativeLayout {
 			postInvalidate();
 		} else {
 			if (isClose) {
-				this.setVisibility(View.GONE);
+				setVisibility(View.GONE);
 			}
 		}
 	}
