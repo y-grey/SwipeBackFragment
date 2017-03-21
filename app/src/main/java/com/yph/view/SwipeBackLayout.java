@@ -122,7 +122,6 @@ public class SwipeBackLayout extends RelativeLayout {
 
 			}else if (model == SWIPE_BOTTOM ) {
 				if (Math.abs(mDelY) > mScreenHeight / 8) {
-					Log.d("","----->"+getScrollY()+"   "+mScreenHeight);
 					startScroll(0,getScrollY(),0, -mScreenHeight-getScrollY(), 1000);
 					isClose = true;
 				} else {
