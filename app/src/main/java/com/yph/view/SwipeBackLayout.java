@@ -84,11 +84,16 @@ public class SwipeBackLayout extends RelativeLayout {
 		mScroller.startScroll(startX, startY, dx, dy,duration);
 		invalidate();
 	}
-
+	private void startScrollToFinish(int startX,int startY,int dx,int dy, int duration) {
+		if(ComputeScrollFinish)
+			startScroll( startX, startY, dx, dy,  duration);
+		isClose = true;
+		if(onSwipeFinishListener != null)
+			onSwipeFinishListener.swipeStart();
+	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
-
 		case MotionEvent.ACTION_MOVE:
 			mCurryX = (int) event.getX();
 			mCurryY = (int) event.getY();
@@ -112,36 +117,26 @@ public class SwipeBackLayout extends RelativeLayout {
 			mDelY = mCurryY - mLastDownY;
 			if (model == SWIPE_RIGHT ) {
 				if (Math.abs(mDelX) > mScreenWidth / 3) {
-					startScroll(getScrollX(),0, -mScreenWidth-getScrollX(),0, 1000);
-					isClose = true;
-					if(onSwipeFinish != null)
-					onSwipeFinish.swipeFinish();
+					startScrollToFinish(getScrollX(),0, -mScreenWidth-getScrollX(),0, 1000);
 				} else {
 					startScroll(getScrollX(),0, -getScrollX(),0, 500);
 				}
 
 			}else if (model == SWIPE_BOTTOM ) {
 				if (Math.abs(mDelY) > mScreenHeight / 8) {
-					startScroll(0,getScrollY(),0, -mScreenHeight-getScrollY(), 1000);
-					isClose = true;
+					startScrollToFinish(0,getScrollY(),0, -mScreenHeight-getScrollY(), 1000);
 				} else {
 					startScroll(0,getScrollY(),0, -getScrollY(), 500);
 				}
 			}else if (model == SWIPE_LEFT ) {
 				if (Math.abs(mDelX) > mScreenWidth / 3) {
-					startScroll(getScrollX(),0,mScreenWidth-getScrollX() ,0, 1000);
-					isClose = true;
-					if(onSwipeFinish != null)
-						onSwipeFinish.swipeFinish();
+					startScrollToFinish(getScrollX(),0,mScreenWidth-getScrollX() ,0, 1000);
 				} else {
 					startScroll(getScrollX(),0, -getScrollX(),0, 500);
 				}
 			}else if (model == SWIPE_TOP ) {
 				if (Math.abs(mDelY) > mScreenHeight / 8) {
-					startScroll(0,getScrollY(),0,mScreenHeight-getScrollY(), 1000);
-					isClose = true;
-					if(onSwipeFinish != null)
-						onSwipeFinish.swipeFinish();
+					startScrollToFinish(0,getScrollY(),0,mScreenHeight-getScrollY(), 1000);
 				} else {
 					startScroll(0,getScrollY(),0, -getScrollY(), 500);
 				}
@@ -183,7 +178,6 @@ public class SwipeBackLayout extends RelativeLayout {
 
 	@Override
 	public void computeScroll() {
-
 		if (mScroller.computeScrollOffset()) {
 			scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
 			Log.i("scroller", "getCurrX()= " + mScroller.getCurrX()
@@ -193,17 +187,24 @@ public class SwipeBackLayout extends RelativeLayout {
 		} else {
 			if (isClose) {
 				setVisibility(View.GONE);
+				if(onSwipeFinishListener != null)
+					onSwipeFinishListener.swipeFinish();
 			}
 		}
 	}
 	public void setModel(int model){
 		this.model = model;
 	}
-	private OnSwipeFinish onSwipeFinish;
-	public interface OnSwipeFinish{
-        void swipeFinish();
+	boolean ComputeScrollFinish = true;
+	public void setComputeScrollFinish(boolean ComputeScrollFinish){
+		this.ComputeScrollFinish = ComputeScrollFinish;
 	}
-	public void setOnSwipeFinish(OnSwipeFinish onSwipeFinish){
-		this.onSwipeFinish = onSwipeFinish;
+	private OnSwipeFinishListener onSwipeFinishListener;
+	public interface OnSwipeFinishListener {
+        void swipeFinish();
+		void swipeStart();
+	}
+	public void setOnSwipeFinishListener(OnSwipeFinishListener onSwipeFinishListener){
+		this.onSwipeFinishListener = onSwipeFinishListener;
 	}
 }

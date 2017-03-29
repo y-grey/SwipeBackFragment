@@ -1,11 +1,8 @@
 package com.yph.view;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.io.Serializable;
 
@@ -15,33 +12,24 @@ import java.io.Serializable;
 
 public abstract class BaseSwipeFragment extends Fragment {
 
-    protected View rootView;
     private SwipeBackLayout swipeBackLayout;
+    private Activity activity;
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(getViewRootId(), container, false);
-        if (!attachSwipe()) {
-            return rootView;
-        }
+    protected View attachSwipe(View rootView){
+        activity = getActivity();
         swipeBackLayout = new SwipeBackLayout(getActivity());
-        swipeBackLayout.setOnSwipeFinish(new SwipeBackLayout.OnSwipeFinish() {
+        swipeBackLayout.setOnSwipeFinishListener(new SwipeBackLayout.OnSwipeFinishListener() {
             @Override
             public void swipeFinish() {
+            }
+            @Override
+            public void swipeStart() {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
         swipeBackLayout.addView(rootView);
+        swipeBackLayout.setComputeScrollFinish(false);
         return swipeBackLayout;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        init();
     }
 
     protected Serializable getBundleObj() {
@@ -55,10 +43,4 @@ public abstract class BaseSwipeFragment extends Fragment {
     protected void setSwipeEnable(boolean isEnable) {
         swipeBackLayout.setEnabled(isEnable);
     }
-
-    protected abstract boolean attachSwipe();
-
-    protected abstract void init();
-
-    protected abstract int getViewRootId();
 }
