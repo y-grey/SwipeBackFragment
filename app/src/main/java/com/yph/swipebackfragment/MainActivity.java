@@ -1,10 +1,10 @@
 package com.yph.swipebackfragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.yph.view.AddSwipeFragmentUtil;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -13,15 +13,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-    public void addFragmentClick(View v){
-        addFragment(new FragmentSlide(),R.anim.slide_in_from_right,R.anim.slide_out_to_right);
-    }
-    public void addFragment(Fragment fragment , int inID , int outID) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.addToBackStack(null);
-        ft.setCustomAnimations(inID,outID,inID,outID);
-        ft.add(R.id.slide_fragment, fragment);
-        ft.commitAllowingStateLoss();
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddSwipeFragmentUtil.addFragmentFromRight(MainActivity.this,new FragmentSlide());
+            }
+        });
     }
 }

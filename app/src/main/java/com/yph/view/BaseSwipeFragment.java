@@ -1,6 +1,5 @@
 package com.yph.view;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -13,10 +12,9 @@ import java.io.Serializable;
 public abstract class BaseSwipeFragment extends Fragment {
 
     private SwipeBackLayout swipeBackLayout;
-    private Activity activity;
+    private int model = SwipeBackLayout.SWIPE_RIGHT;
 
     protected View attachSwipe(View rootView){
-        activity = getActivity();
         swipeBackLayout = new SwipeBackLayout(getActivity());
         swipeBackLayout.setOnSwipeFinishListener(new SwipeBackLayout.OnSwipeFinishListener() {
             @Override
@@ -28,6 +26,7 @@ public abstract class BaseSwipeFragment extends Fragment {
             }
         });
         swipeBackLayout.addView(rootView);
+        swipeBackLayout.setModel(model);
         swipeBackLayout.setComputeScrollFinish(false);
         return swipeBackLayout;
     }
@@ -37,7 +36,7 @@ public abstract class BaseSwipeFragment extends Fragment {
     }
 
     protected void setSwipeModel(int model) {
-        swipeBackLayout.setModel(model);
+        this.model = model;
     }
 
     protected void setSwipeEnable(boolean isEnable) {
