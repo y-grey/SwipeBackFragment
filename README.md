@@ -1,31 +1,19 @@
 # SwipeBackFragment
-
+![img](https://github.com/qq542391099/SwipeBackFragment/blob/master/gif/effect.gif)
 SwipeBackFragment,实现拖拽返回的fragment，一个类似于SwipeBackActivity的开源项目。
 
 支持四个方向拖拽，通过setSwipeModel(SwipeBackLayout.SWIPE_RIGHT)...
 
 
-用法：继承BaseSwipeFragment，实现三个方法
-
-
-public class FragmentSlide extends BaseSwipeFragment {
-
-	@Override
-	public boolean attachSwipe() {return true;}
-
-    @Override
-    protected int getViewRootId() {return R.layout.fragment_slide;}
-
-    @Override
-    protected void init() {}
-}
-
-
-attachSwipe()：是否支持拖拽
-
-getViewRootId()：返回fragment根布局
-
-init()：初始化代码写在这里
+用法：
+   1,继承BaseSwipeFragment
+   2,attachSwipe(rootView)
+   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_slide, container, false);
+        return attachSwipe(rootView);
+    }
+   3,AddSwipeFragmentUtil.addFragmentFromRight(MainActivity.this,new FragmentSlide());
 
 Contact Author：
 
