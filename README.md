@@ -1,4 +1,5 @@
 
+![img](https://github.com/qq542391099/SwipeBackFragment/blob/master/gif/effect.gif)
 
 SwipeBackFragment
 实现拖拽返回的fragment，一个类似于SwipeBackActivity的开源项目。
