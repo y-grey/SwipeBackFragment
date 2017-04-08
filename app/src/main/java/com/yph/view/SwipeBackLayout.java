@@ -7,18 +7,24 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class SwipeBackLayout extends RelativeLayout {
+
+public class SwipeBackLayout extends FrameLayout {
 
     private Context mContext;
     private Scroller mScroller;
@@ -87,6 +93,34 @@ public class SwipeBackLayout extends RelativeLayout {
         mPaint.setStrokeWidth(2);
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.DKGRAY);
+
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        post(runnable);
+    }
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            viewPagers.clear();
+            findViewPager(SwipeBackLayout.this);
+        }
+    };
+    List<ViewPager> viewPagers = new ArrayList<>();
+    private void findViewPager(ViewGroup viewGroup){
+        if (viewGroup == null || viewGroup.getVisibility() != View.VISIBLE) {
+            return ;
+        }
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View view = viewGroup.getChildAt(i);
+            if (view instanceof ViewPager) {
+                viewPagers.add((ViewPager)view);
+            }else if(view instanceof ViewGroup){
+                findViewPager((ViewGroup)view);
+            }
+        }
     }
 
     private void startScroll(int startX, int startY, int dx, int dy, int duration) {
@@ -175,6 +209,11 @@ public class SwipeBackLayout extends RelativeLayout {
                 float yDiff = Math.abs(eventY - mLastDownY);
                 if (model == SWIPE_LEFT || model == SWIPE_RIGHT) {
                     if (xDiff > mTouchSlop && xDiff > yDiff) { //x滑动距离大于y滑动距离，并且大于mTouchSlop，认为是左滑
+                        for(ViewPager vp : viewPagers){
+                            if(inRangeOfView(vp,event)){//如果滑动的是viewPager
+                                return false;//不拦截，事件交由viewPager处理
+                            }
+                        }
                         return true;//拦截处理事件
                     }
                 } else if (model == SWIPE_TOP || model == SWIPE_BOTTOM) {
@@ -185,6 +224,17 @@ public class SwipeBackLayout extends RelativeLayout {
                 break;
         }
         return false;
+    }
+
+    private boolean inRangeOfView(View view, MotionEvent event) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        int x = location[0];
+        int y = location[1];
+        if (event.getX() < x || event.getX() > (x + view.getWidth()) || event.getY() < y || event.getY() > (y + view.getHeight())) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -209,6 +259,7 @@ public class SwipeBackLayout extends RelativeLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         drawShadow(canvas);
+        Log.d("", "------>dispatchDraw");
         super.dispatchDraw(canvas);
     }
 
@@ -246,6 +297,7 @@ public class SwipeBackLayout extends RelativeLayout {
 
     /**
      * 设置滑动方向
+     *
      * @param model 如SwipeBackLayout.SWIPE_LEFT
      */
 
