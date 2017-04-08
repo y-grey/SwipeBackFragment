@@ -99,15 +99,9 @@ public class SwipeBackLayout extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        post(runnable);
+        viewPagers.clear();
+        findViewPager(SwipeBackLayout.this);
     }
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            viewPagers.clear();
-            findViewPager(SwipeBackLayout.this);
-        }
-    };
     List<ViewPager> viewPagers = new ArrayList<>();
     private void findViewPager(ViewGroup viewGroup){
         if (viewGroup == null || viewGroup.getVisibility() != View.VISIBLE) {
