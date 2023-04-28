@@ -11,11 +11,3 @@ SwipeBackFragment
    1,继承BaseSwipeFragment
    2,onCreateView里attachSwipe(rootView)具体看demo
    3,AddSwipeFragmentUtil.addFragmentFromRight(MainActivity.this,new FragmentSlide());
-
-Contact Author：
-
-E-mail:aa999999999@vip.qq.com
-
-QQ:542391099
-
-csdn: blog.csdn.net/u012874222
